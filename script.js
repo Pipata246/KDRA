@@ -3,6 +3,24 @@
 
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* --- Global copy protection --- */
+  function initCopyProtection() {
+    function blockDefault(e) {
+      e.preventDefault();
+    }
+
+    ['copy', 'cut', 'selectstart', 'contextmenu', 'dragstart'].forEach(function (eventName) {
+      document.addEventListener(eventName, blockDefault);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      var key = (e.key || '').toLowerCase();
+      if ((e.ctrlKey || e.metaKey) && (key === 'c' || key === 'x' || key === 'a')) {
+        e.preventDefault();
+      }
+    });
+  }
+
   /* --- Intro floating particles --- */
   function initIntroParticles() {
     var canvas = document.getElementById('introParticles');
@@ -179,7 +197,7 @@
 
       if (openedCount === heartBtns.length && heartReveal) {
         setTimeout(function () {
-          heartReveal.textContent = 'ты собрала все. как и я — тебя.';
+          heartReveal.textContent = 'пусть этот день рождения будет самым теплым и счастливым.';
         }, 900);
       }
     });
@@ -230,38 +248,163 @@
     });
   }
 
-  /* --- Scatter drop-in on first view --- */
-  var scatters = document.querySelectorAll('.scatter');
-  if (scatters.length && 'IntersectionObserver' in window) {
-    var scatterObs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('play');
-          scatterObs.unobserve(entry.target);
+  /* --- Scatter is static (no interactions) --- */
+  document.querySelectorAll('.scatter').forEach(function (s) {
+    s.classList.add('play');
+  });
+
+  /* --- Constellation --- */
+  var constellationSection = document.getElementById('constellationSection');
+  var constellationText = document.getElementById('constellationText');
+  var constellationCounter = document.getElementById('constellationCounter');
+  var constellationBoard = document.querySelector('.constellation-board');
+  var starBtns = document.querySelectorAll('.star-btn');
+
+  if (constellationSection && constellationBoard && starBtns.length) {
+    var litStars = 0;
+    var litStarIds = {};
+    var constellationLines = constellationBoard.querySelectorAll('.constellation-line');
+
+    function updateConstellationLines() {
+      constellationLines.forEach(function (line) {
+        var from = line.getAttribute('data-from');
+        var to = line.getAttribute('data-to');
+        var shouldShow = !!(litStarIds[from] && litStarIds[to]);
+        line.classList.toggle('active', shouldShow);
+      });
+    }
+
+    starBtns.forEach(function (star) {
+      star.addEventListener('click', function () {
+        if (star.classList.contains('lit')) return;
+
+        var starId = star.getAttribute('data-star');
+        star.classList.add('lit');
+        if (starId) litStarIds[starId] = true;
+        litStars++;
+        updateConstellationLines();
+
+        if (constellationText) {
+          constellationText.textContent = star.getAttribute('data-msg');
+          constellationText.classList.remove('show');
+          void constellationText.offsetWidth;
+          constellationText.classList.add('show');
+        }
+
+        if (constellationCounter) {
+          constellationCounter.textContent = 'зажжено: ' + litStars + ' из ' + starBtns.length;
+        }
+
+        var rect = star.getBoundingClientRect();
+        heartBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+
+        if (litStars === starBtns.length) {
+          constellationSection.classList.add('complete');
+          setTimeout(function () {
+            if (constellationText) {
+              constellationText.textContent = 'все пожелания сегодня только для тебя';
+              constellationText.classList.add('show');
+            }
+          }, reducedMotion ? 0 : 500);
         }
       });
-    }, { threshold: 0.3 });
-
-    scatters.forEach(function (s) { scatterObs.observe(s); });
-  } else {
-    scatters.forEach(function (s) { s.classList.add('play'); });
+    });
   }
 
-  document.querySelectorAll('.scatter').forEach(function (s) {
-    s.addEventListener('click', function () {
-      document.querySelectorAll('.scatter').forEach(function (o) {
-        o.classList.remove('tapped');
-      });
-      s.classList.add('tapped');
+  /* --- Vow seal (press and hold) --- */
+  var vowSection = document.getElementById('vowSection');
+  var vowSeal = document.getElementById('vowSeal');
+  var vowFill = document.getElementById('vowFill');
+  var vowText = document.getElementById('vowText');
+
+  if (vowSection && vowSeal && vowFill) {
+    var holdDuration = reducedMotion ? 350 : 1800;
+    var holdStart = 0;
+    var holdRaf = null;
+    var vowDone = false;
+
+    function setVowProgress(value) {
+      var clamped = Math.max(0, Math.min(100, value));
+      vowFill.style.transform = 'scaleX(' + (clamped / 100) + ')';
+    }
+
+    function finishVow() {
+      vowDone = true;
+      if (holdRaf) {
+        cancelAnimationFrame(holdRaf);
+        holdRaf = null;
+      }
+
+      setVowProgress(100);
+      vowSeal.classList.remove('is-holding');
+      vowSeal.classList.add('done');
+      vowSeal.textContent = 'навсегда';
+      vowSection.classList.add('done');
+
+      if (vowText) {
+        vowText.innerHTML = 'с днем рождения, моя любимая.<br>обещаю беречь тебя и радовать каждый день.';
+        vowText.classList.add('show');
+      }
+
+      var sealRect = vowSeal.getBoundingClientRect();
+      heartBurst(sealRect.left + sealRect.width / 2, sealRect.top + sealRect.height / 2);
+    }
+
+    function resetVowHold() {
+      if (vowDone) return;
+
+      if (holdRaf) {
+        cancelAnimationFrame(holdRaf);
+        holdRaf = null;
+      }
+
+      holdStart = 0;
+      vowSeal.classList.remove('is-holding');
+      setVowProgress(0);
+    }
+
+    function holdStep(ts) {
+      if (!holdStart) holdStart = ts;
+      var elapsed = ts - holdStart;
+      var progress = (elapsed / holdDuration) * 100;
+      setVowProgress(progress);
+
+      if (progress >= 100) {
+        finishVow();
+        return;
+      }
+
+      holdRaf = requestAnimationFrame(holdStep);
+    }
+
+    function startVowHold(e) {
+      if (vowDone || holdRaf) return;
+      if (e.cancelable) e.preventDefault();
+
+      vowSeal.classList.add('is-holding');
+      holdStart = 0;
+      holdRaf = requestAnimationFrame(holdStep);
+    }
+
+    vowSeal.addEventListener('pointerdown', startVowHold);
+    window.addEventListener('pointerup', resetVowHold);
+    window.addEventListener('pointercancel', resetVowHold);
+
+    vowSeal.addEventListener('keydown', function (e) {
+      if (vowDone) return;
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        finishVow();
+      }
     });
-  });
+  }
 
   /* --- Finale: typewriter + petals (starts when section visible once) --- */
   var finale = document.getElementById('finale');
   var finaleText = document.getElementById('finaleText');
   var petalsCanvas = document.getElementById('petals');
   var finaleStarted = false;
-  var finaleMessage = 'я не знал, как сказать.\nпоэтому сделал это.';
+  var finaleMessage = 'с днем рождения, моя хорошая.\n25.06 — твой день, и я счастлив быть рядом.';
   var petalsRunning = false;
 
   function typeWriter(text, el, speed) {
@@ -355,6 +498,7 @@
   }
 
   /* --- Init --- */
+  initCopyProtection();
   initIntroParticles();
   initTouchSparkles();
   initPoetry();

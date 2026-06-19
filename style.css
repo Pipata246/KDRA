@@ -21,6 +21,20 @@ body {
   overflow-x: hidden;
 }
 
+html, body, .mobile-shell, .mobile-shell * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.mobile-shell img,
+.mobile-shell svg {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
 .mobile-shell {
   width: 100%;
   max-width: 430px;
@@ -829,8 +843,8 @@ body {
 /* ===== Scatter ===== */
 .scatter-section {
   position: relative;
-  height: 480px;
-  padding: 40px 0;
+  height: 540px;
+  padding: 26px 0 30px;
 }
 
 .scatter {
@@ -838,30 +852,43 @@ body {
   background: #fff;
   padding: 8px 8px 28px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  opacity: 0;
+  opacity: 1;
+  pointer-events: none;
 }
 
 .scatter--1 {
   top: 20px;
-  left: 24px;
-  width: 140px;
-  --rotate: -6deg;
+  left: 18px;
+  width: 144px;
+  --rotate: -5deg;
+  transform: rotate(-5deg);
 }
 
 .scatter--2 {
-  top: 120px;
-  right: 20px;
-  width: 160px;
-  z-index: 2;
+  top: 34px;
+  right: 18px;
+  width: 152px;
+  z-index: 1;
   --rotate: 4deg;
+  transform: rotate(4deg);
 }
 
 .scatter--3 {
-  bottom: 30px;
-  left: 50%;
-  width: 150px;
+  bottom: 36px;
+  left: 24px;
+  width: 148px;
   z-index: 1;
-  --rotate: -2deg;
+  --rotate: -3deg;
+  transform: rotate(-3deg);
+}
+
+.scatter--4 {
+  bottom: 22px;
+  right: 22px;
+  width: 140px;
+  z-index: 1;
+  --rotate: 2deg;
+  transform: rotate(2deg);
 }
 
 .scatter--1.play {
@@ -925,6 +952,212 @@ body {
   z-index: 10;
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 20px 50px rgba(107, 122, 90, 0.3);
+}
+
+.scatter,
+.scatter.play,
+.scatter.tapped {
+  animation: none !important;
+}
+
+/* ===== Constellation ===== */
+.constellation-section {
+  padding: 62px 20px 58px;
+  background: radial-gradient(circle at 50% 15%, #3f4b39 0%, #2e362b 48%, #252d24 100%);
+  color: #f3f3ef;
+  text-align: center;
+}
+
+.constellation-section .section-whisper {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.constellation-board {
+  width: 100%;
+  max-width: 356px;
+  min-height: 326px;
+  margin: 20px auto 0;
+  padding: 14px 14px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28);
+}
+
+.constellation-sky {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 320 / 220;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.constellation-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.constellation-line {
+  stroke: rgba(245, 239, 187, 0.7);
+  stroke-width: 1.4;
+  stroke-dasharray: 170;
+  stroke-dashoffset: 170;
+  opacity: 0;
+  transition: stroke-dashoffset 0.85s ease, opacity 0.55s ease;
+}
+
+.constellation-line.active {
+  stroke-dashoffset: 0;
+  opacity: 0.95;
+}
+
+.star-btn {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  transform: translate(-50%, -50%) scale(0.95);
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 17px;
+  cursor: pointer;
+  transition: transform 0.35s ease, color 0.3s ease, text-shadow 0.35s ease;
+}
+
+.star-btn:active {
+  transform: translate(-50%, -50%) scale(1.12);
+}
+
+.star-btn.lit {
+  color: #fff8c9;
+  text-shadow: 0 0 12px rgba(255, 247, 182, 0.9), 0 0 25px rgba(255, 247, 182, 0.4);
+  animation: starBloom 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.constellation-text {
+  margin-top: 16px;
+  min-height: 74px;
+  width: 100%;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-style: italic;
+  line-height: 1.35;
+  opacity: 0.75;
+  transition: opacity 0.35s ease, transform 0.45s ease;
+}
+
+.constellation-text.show {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.constellation-counter {
+  margin-top: 10px;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.constellation-section.complete .constellation-board {
+  box-shadow: 0 16px 46px rgba(0, 0, 0, 0.35), 0 0 40px rgba(255, 248, 181, 0.22);
+}
+
+@keyframes starBloom {
+  0% { transform: translate(-50%, -50%) scale(0.65); opacity: 0.5; }
+  70% { transform: translate(-50%, -50%) scale(1.28); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+/* ===== Vow seal ===== */
+.vow-section {
+  position: relative;
+  padding: 64px 24px 74px;
+  text-align: center;
+  background: linear-gradient(180deg, #f2efe8 0%, #ebe7de 100%);
+}
+
+.vow-seal {
+  margin-top: 18px;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  border: 1px solid rgba(107, 122, 90, 0.3);
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0)),
+    radial-gradient(circle at 50% 50%, #859271 0%, #6b7a5a 75%);
+  color: #fff;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  touch-action: none;
+  box-shadow: 0 12px 30px rgba(69, 78, 58, 0.3);
+  transition: transform 0.25s ease, box-shadow 0.3s ease;
+}
+
+.vow-seal.is-holding {
+  transform: scale(1.04);
+  box-shadow: 0 0 0 10px rgba(107, 122, 90, 0.12), 0 14px 34px rgba(69, 78, 58, 0.35);
+}
+
+.vow-seal.done {
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0)),
+    radial-gradient(circle at 50% 50%, #8f9b7c 0%, #738362 80%);
+}
+
+.vow-section.done .vow-seal {
+  animation: sealPulse 2.2s ease-in-out infinite;
+}
+
+.vow-progress {
+  width: 220px;
+  height: 5px;
+  margin: 20px auto 0;
+  border-radius: 999px;
+  background: rgba(107, 122, 90, 0.2);
+  overflow: hidden;
+}
+
+.vow-progress__fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #6b7a5a, #94a283);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.12s linear;
+}
+
+.vow-text {
+  margin-top: 24px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 25px;
+  font-style: italic;
+  line-height: 1.4;
+  color: #4b5540;
+  min-height: 72px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.vow-text.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes sealPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 12px 30px rgba(69, 78, 58, 0.3); }
+  50% { transform: scale(1.04); box-shadow: 0 0 0 12px rgba(115, 131, 98, 0.12), 0 16px 36px rgba(69, 78, 58, 0.36); }
 }
 
 /* ===== Finale ===== */
