@@ -404,7 +404,7 @@
   var finaleText = document.getElementById('finaleText');
   var petalsCanvas = document.getElementById('petals');
   var finaleStarted = false;
-  var finaleMessage = 'с днем рождения, моя хорошая.\n25.06 — твой день, и я счастлив быть рядом.';
+  var finaleMessage = 'с днем рождения, моя хорошая.\n25.06 — твой день, и я счастлив любить тебя даже на расстоянии.';
   var petalsRunning = false;
 
   function typeWriter(text, el, speed) {
