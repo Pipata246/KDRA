@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Для Арины</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="mobile-shell">
+
+    <!-- Глобальные частицы при касании -->
+    <div class="touch-layer" id="touchLayer" aria-hidden="true"></div>
+
+    <!-- Вход -->
+    <section class="intro">
+      <canvas class="intro-particles" id="introParticles" aria-hidden="true"></canvas>
+      <div class="intro-glow" aria-hidden="true"></div>
+      <div class="botanical botanical--tl" aria-hidden="true"></div>
+      <div class="botanical botanical--tr" aria-hidden="true"></div>
+
+      <p class="intro-whisper">это только для тебя</p>
+      <h1 class="intro-name" aria-label="Арина">
+        <span class="letter">А</span><span class="letter">р</span><span class="letter">и</span><span class="letter">н</span><span class="letter">а</span>
+      </h1>
+      <div class="intro-sparkle" aria-hidden="true">✦</div>
+      <p class="intro-hint">листай ↓</p>
+    </section>
+
+    <!-- Стихи — сменяются сами, без скролла -->
+    <section class="poetry-section">
+      <div class="poetry-orbs" aria-hidden="true">
+        <span class="orb orb--1"></span>
+        <span class="orb orb--2"></span>
+        <span class="orb orb--3"></span>
+      </div>
+      <div class="poetry-stage" id="poetryStage">
+        <p class="poetry-line active">иногда я просто смотрю на тебя</p>
+        <p class="poetry-line">и понимаю — вот оно</p>
+        <p class="poetry-line">вот ради чего всё</p>
+        <p class="poetry-line">ты даже не представляешь, как сильно</p>
+      </div>
+      <div class="poetry-dots" id="poetryDots" aria-hidden="true"></div>
+    </section>
+
+    <!-- Полароиды -->
+    <section class="polaroid-section">
+      <p class="section-whisper shimmer-text">моменты, которые я храню</p>
+      <div class="polaroid-track">
+        <article class="polaroid float-card" style="--rotate: -4deg; --delay: 0s">
+          <div class="polaroid__inner">
+            <div class="polaroid__photo placeholder"><span>твоё фото</span></div>
+            <p class="polaroid__note">эта улыбка — моя самая любимая</p>
+          </div>
+        </article>
+        <article class="polaroid float-card" style="--rotate: 3deg; --delay: 0.4s">
+          <div class="polaroid__inner">
+            <div class="polaroid__photo placeholder"><span>твоё фото</span></div>
+            <p class="polaroid__note">здесь ты не знала, что я смотрю</p>
+          </div>
+        </article>
+        <article class="polaroid float-card" style="--rotate: -2deg; --delay: 0.8s">
+          <div class="polaroid__inner">
+            <div class="polaroid__photo placeholder"><span>твоё фото</span></div>
+            <p class="polaroid__note">мне нравится каждая твоя гримаса</p>
+          </div>
+        </article>
+        <article class="polaroid float-card" style="--rotate: 5deg; --delay: 1.2s">
+          <div class="polaroid__inner">
+            <div class="polaroid__photo placeholder"><span>твоё фото</span></div>
+            <p class="polaroid__note">я бы остановил время здесь</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Сердечки -->
+    <section class="hearts-section">
+      <p class="section-whisper shimmer-text">нажми на сердечки</p>
+      <div class="hearts-field" id="heartsField">
+        <button class="heart-btn pulse-heart" data-msg="мне нравится, как ты смеёшься — искренне, до конца">♥</button>
+        <button class="heart-btn pulse-heart" data-msg="ты делаешь обычные дни особенными">♥</button>
+        <button class="heart-btn pulse-heart" data-msg="я выбираю тебя — каждый раз">♥</button>
+        <button class="heart-btn pulse-heart" data-msg="рядом с тобой мне не нужно притворяться">♥</button>
+        <button class="heart-btn pulse-heart" data-msg="ты красивая даже тогда, когда сама этого не видишь">♥</button>
+        <button class="heart-btn pulse-heart" data-msg="я горжусь тем, что ты моя">♥</button>
+        <button class="heart-btn pulse-heart" data-msg="ты — мой самый тихий и самый громкий дом">♥</button>
+        <button class="heart-btn pulse-heart" data-msg="я бы снова нашёл тебя среди миллионов">♥</button>
+        <button class="heart-btn pulse-heart" data-msg="люблю тебя — без повода, просто так">♥</button>
+      </div>
+      <p class="heart-reveal" id="heartReveal">...</p>
+      <p class="hearts-counter" id="heartsCounter">найдено: 0 из 9</p>
+    </section>
+
+    <!-- Конверт -->
+    <section class="envelope-section" id="envelopeSection">
+      <button class="envelope breathe" id="envelope" aria-label="Открыть письмо">
+        <div class="envelope__shine" aria-hidden="true"></div>
+        <div class="envelope__box">
+          <div class="envelope__back"></div>
+          <div class="envelope__letter">
+            <p>
+              Я не умею красиво говорить вслух.<br>
+              Поэтому сделал это — страницу, которую<br>
+              можно трогать, листать, открывать.<br><br>
+              Ты стоила каждой минуты,<br>
+              которую я потратил на неё.<br><br>
+              Просто знай — ты важнее всего.
+            </p>
+          </div>
+          <div class="envelope__pocket"></div>
+          <div class="envelope__flap"></div>
+        </div>
+      </button>
+      <p class="envelope-hint pulse-hint" id="envelopeHint">нажми на конверт</p>
+    </section>
+
+    <!-- Россыпь фото -->
+    <section class="scatter-section">
+      <div class="scatter scatter--1 drop-in" style="--delay: 0.1s">
+        <div class="scatter__photo placeholder"><span>твоё фото</span></div>
+      </div>
+      <div class="scatter scatter--2 drop-in" style="--delay: 0.35s">
+        <div class="scatter__photo placeholder"><span>твоё фото</span></div>
+      </div>
+      <div class="scatter scatter--3 drop-in" style="--delay: 0.6s">
+        <div class="scatter__photo placeholder"><span>твоё фото</span></div>
+      </div>
+    </section>
+
+    <!-- Финал -->
+    <section class="finale" id="finale">
+      <canvas class="petals" id="petals" aria-hidden="true"></canvas>
+      <p class="finale-text" id="finaleText"></p>
+      <p class="finale-sign">Кирилл <span class="beating-heart">♥</span></p>
+    </section>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
