@@ -8,12 +8,12 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 18px;
 }
 
 body {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   color: #4a4a4a;
   background: #d8d6d0;
   line-height: 1.6;
@@ -61,7 +61,7 @@ html, body, .mobile-shell, .mobile-shell * {
 .touch-spark {
   position: absolute;
   pointer-events: none;
-  font-size: 12px;
+  font-size: 14px;
   color: #6b7a5a;
   animation: sparkFly 1s ease-out forwards;
 }
@@ -160,7 +160,7 @@ html, body, .mobile-shell, .mobile-shell * {
   position: relative;
   z-index: 2;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 15px;
+  font-size: 20px;
   font-style: italic;
   color: #6b7a5a;
   opacity: 0;
@@ -172,7 +172,7 @@ html, body, .mobile-shell, .mobile-shell * {
   position: relative;
   z-index: 2;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 56px;
+  font-size: 62px;
   font-weight: 500;
   letter-spacing: 0.06em;
   color: #3d3d3d;
@@ -200,7 +200,7 @@ html, body, .mobile-shell, .mobile-shell * {
   position: relative;
   z-index: 2;
   margin-top: 20px;
-  font-size: 14px;
+  font-size: 17px;
   color: #8a9478;
   opacity: 0;
   animation: sparkleSpin 3s linear 2s infinite, fadeUp 1s ease 1.8s forwards;
@@ -210,7 +210,7 @@ html, body, .mobile-shell, .mobile-shell * {
   position: absolute;
   bottom: 40px;
   z-index: 2;
-  font-size: 10px;
+  font-size: 13px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #9a9a9a;
@@ -308,7 +308,7 @@ html, body, .mobile-shell, .mobile-shell * {
   position: relative;
   z-index: 1;
   width: 100%;
-  min-height: 100px;
+  min-height: 130px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -317,7 +317,7 @@ html, body, .mobile-shell, .mobile-shell * {
 .poetry-line {
   position: absolute;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 26px;
+  font-size: 31px;
   font-style: italic;
   color: #4a4a4a;
   text-align: center;
@@ -372,7 +372,7 @@ html, body, .mobile-shell, .mobile-shell * {
 /* ===== Whisper labels ===== */
 .section-whisper {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 13px;
+  font-size: 18px;
   font-style: italic;
   color: #8a9478;
   text-align: center;
@@ -472,7 +472,7 @@ html, body, .mobile-shell, .mobile-shell * {
 
 .polaroid__photo.placeholder span,
 .scatter__photo.placeholder span {
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.75);
@@ -488,7 +488,7 @@ html, body, .mobile-shell, .mobile-shell * {
 
 .polaroid__note {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 14px;
+  font-size: 18px;
   font-style: italic;
   color: #5a5a5a;
   text-align: center;
@@ -519,7 +519,7 @@ html, body, .mobile-shell, .mobile-shell * {
   margin: 0 auto;
   border: none;
   background: transparent;
-  font-size: 22px;
+  font-size: 28px;
   color: #c4b8a8;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -559,10 +559,10 @@ html, body, .mobile-shell, .mobile-shell * {
 
 .heart-reveal {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 18px;
+  font-size: 24px;
   font-style: italic;
   color: #4a4a4a;
-  min-height: 54px;
+  min-height: 82px;
   line-height: 1.5;
   padding: 0 16px;
   opacity: 0.35;
@@ -583,7 +583,7 @@ html, body, .mobile-shell, .mobile-shell * {
 }
 
 .hearts-counter {
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: #aaa;
@@ -777,7 +777,7 @@ html, body, .mobile-shell, .mobile-shell * {
 
 .envelope__letter p {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 12px;
+  font-size: 15px;
   font-style: italic;
   line-height: 1.6;
   color: #4a4a4a;
@@ -805,7 +805,7 @@ html, body, .mobile-shell, .mobile-shell * {
 }
 
 .envelope__hearts span {
-  font-size: 9px;
+  font-size: 12px;
   color: #6b4a3a;
   opacity: 0.8;
 }
@@ -816,7 +816,7 @@ html, body, .mobile-shell, .mobile-shell * {
 }
 
 .envelope-hint {
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #9a9a9a;
@@ -1025,7 +1025,7 @@ html, body, .mobile-shell, .mobile-shell * {
   border-radius: 50%;
   background: transparent;
   color: rgba(255, 255, 255, 0.5);
-  font-size: 17px;
+  font-size: 22px;
   cursor: pointer;
   transition: transform 0.35s ease, color 0.3s ease, text-shadow 0.35s ease;
 }
@@ -1042,10 +1042,10 @@ html, body, .mobile-shell, .mobile-shell * {
 
 .constellation-text {
   margin-top: 16px;
-  min-height: 74px;
+  min-height: 102px;
   width: 100%;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 22px;
+  font-size: 28px;
   font-style: italic;
   line-height: 1.35;
   opacity: 0.75;
@@ -1059,7 +1059,7 @@ html, body, .mobile-shell, .mobile-shell * {
 
 .constellation-counter {
   margin-top: 10px;
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.62);
@@ -1094,7 +1094,7 @@ html, body, .mobile-shell, .mobile-shell * {
     radial-gradient(circle at 50% 50%, #859271 0%, #6b7a5a 75%);
   color: #fff;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 22px;
+  font-size: 28px;
   letter-spacing: 0.03em;
   cursor: pointer;
   touch-action: none;
@@ -1140,11 +1140,11 @@ html, body, .mobile-shell, .mobile-shell * {
 .vow-text {
   margin-top: 24px;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 25px;
+  font-size: 31px;
   font-style: italic;
   line-height: 1.4;
   color: #4b5540;
-  min-height: 72px;
+  min-height: 108px;
   opacity: 0;
   transform: translateY(8px);
   transition: opacity 0.5s ease, transform 0.5s ease;
@@ -1183,7 +1183,7 @@ html, body, .mobile-shell, .mobile-shell * {
   position: relative;
   z-index: 1;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 20px;
+  font-size: 26px;
   font-style: italic;
   line-height: 1.6;
   min-height: 64px;
@@ -1204,7 +1204,7 @@ html, body, .mobile-shell, .mobile-shell * {
   position: relative;
   z-index: 1;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 15px;
+  font-size: 19px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   opacity: 0;
@@ -1217,7 +1217,7 @@ html, body, .mobile-shell, .mobile-shell * {
 .beating-heart {
   display: block;
   margin-top: 8px;
-  font-size: 14px;
+  font-size: 18px;
   animation: heartBeat 1.2s ease-in-out infinite;
 }
 
