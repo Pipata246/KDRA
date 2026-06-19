@@ -97,25 +97,31 @@
 
     <!-- Конверт -->
     <section class="envelope-section" id="envelopeSection">
-      <button class="envelope breathe" id="envelope" aria-label="Открыть письмо">
-        <div class="envelope__shine" aria-hidden="true"></div>
-        <div class="envelope__box">
-          <div class="envelope__back"></div>
-          <div class="envelope__letter">
-            <p>
-              Я не умею красиво говорить вслух.<br>
-              Поэтому сделал это — страницу, которую<br>
-              можно трогать, листать, открывать.<br><br>
-              Ты стоила каждой минуты,<br>
-              которую я потратил на неё.<br><br>
-              Просто знай — ты важнее всего.
-            </p>
+      <button class="envelope" id="envelope" aria-label="Открыть письмо" disabled>
+        <div class="envelope-frame">
+          <div class="envelope__cluster">
+            <div class="envelope__back" aria-hidden="true"></div>
+            <div class="envelope__letter">
+              <p>
+                Я не умею красиво говорить вслух.<br>
+                Поэтому сделал это — страницу, которую<br>
+                можно трогать, листать, открывать.<br><br>
+                Ты стоила каждой минуты,<br>
+                которую я потратил на неё.<br><br>
+                Просто знай — ты важнее всего.
+              </p>
+            </div>
+            <div class="envelope__pocket" aria-hidden="true"></div>
+            <div class="envelope__flap-wrap" aria-hidden="true">
+              <div class="envelope__flap"></div>
+            </div>
+            <div class="envelope__hearts" aria-hidden="true">
+              <span>♥</span><span>♥</span><span>♥</span>
+            </div>
           </div>
-          <div class="envelope__pocket"></div>
-          <div class="envelope__flap"></div>
         </div>
       </button>
-      <p class="envelope-hint pulse-hint" id="envelopeHint">нажми на конверт</p>
+      <p class="envelope-hint" id="envelopeHint">нажми на конверт</p>
     </section>
 
     <!-- Россыпь фото -->

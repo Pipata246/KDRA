@@ -185,18 +185,48 @@
     });
   });
 
-  /* --- Envelope --- */
+  /* --- Envelope: выкатывание + открытие --- */
   var envelope = document.getElementById('envelope');
   var envelopeHint = document.getElementById('envelopeHint');
   var envelopeSection = document.getElementById('envelopeSection');
 
-  if (envelope) {
+  if (envelopeSection && envelope) {
+    var rollStarted = false;
+
+    function enableEnvelope() {
+      envelopeSection.classList.add('is-ready');
+      envelope.classList.add('is-ready');
+      envelope.disabled = false;
+    }
+
+    if ('IntersectionObserver' in window) {
+      var rollObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting && !rollStarted) {
+            rollStarted = true;
+            envelopeSection.classList.add('is-visible');
+            setTimeout(enableEnvelope, 1350);
+            rollObs.disconnect();
+          }
+        });
+      }, { threshold: 0.35 });
+      rollObs.observe(envelopeSection);
+    } else {
+      envelopeSection.classList.add('is-visible');
+      enableEnvelope();
+    }
+
     envelope.addEventListener('click', function (e) {
-      if (envelope.classList.contains('open')) return;
+      if (!envelope.classList.contains('is-ready') || envelope.classList.contains('open')) return;
       envelope.classList.add('open');
-      if (envelopeSection) envelopeSection.classList.add('is-open');
       if (envelopeHint) envelopeHint.classList.add('hidden');
       heartBurst(e.clientX, e.clientY);
+      setTimeout(function () {
+        envelope.classList.add('flap-done');
+      }, 1150);
+      setTimeout(function () {
+        envelope.classList.add('letter-out');
+      }, 1450);
     });
   }
 

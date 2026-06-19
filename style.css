@@ -578,139 +578,227 @@ body {
 
 /* ===== Envelope ===== */
 .envelope-section {
-  padding: 40px 24px 64px;
+  padding: 36px 20px 56px;
   text-align: center;
   background: #f5f3ee;
-  transition: padding-bottom 0.8s ease;
-}
-
-.envelope-section.is-open {
-  padding-bottom: 220px;
+  min-height: 360px;
 }
 
 .envelope {
-  position: relative;
-  width: 260px;
+  display: block;
+  width: 100%;
+  max-width: 280px;
   margin: 0 auto;
+  padding: 0;
   border: none;
   background: transparent;
-  cursor: pointer;
+  cursor: default;
   -webkit-tap-highlight-color: transparent;
 }
 
-.breathe {
+.envelope:disabled {
+  opacity: 1;
+}
+
+.envelope.is-ready {
+  cursor: pointer;
+}
+
+.envelope.is-ready:not(.open) {
   animation: envelopeBreathe 3s ease-in-out infinite;
+}
+
+.envelope.is-ready:not(.open) .envelope-frame {
+  animation: none;
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.envelope.open {
+  cursor: default;
+  pointer-events: none;
 }
 
 @keyframes envelopeBreathe {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.03); }
+  50% { transform: scale(1.02); }
 }
 
-.envelope__shine {
-  position: absolute;
-  inset: -10px;
-  border-radius: 8px;
-  background: radial-gradient(ellipse at center, rgba(107, 122, 90, 0.2) 0%, transparent 70%);
-  animation: glowPulse 3s ease-in-out infinite;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.envelope__box {
+.envelope-frame {
   position: relative;
-  width: 260px;
-  height: 150px;
-  perspective: 900px;
-  transform-style: preserve-3d;
-  transition: height 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.15s;
+  width: 100%;
+  height: 320px;
+  margin: 0 auto;
+  overflow: visible;
+  opacity: 0;
+  transform: translateY(70px) scale(0.55);
+  filter: blur(6px);
 }
 
-.envelope.open .envelope__box {
-  height: 310px;
+.envelope-section.is-visible .envelope-frame {
+  animation: envelopeRollIn 1.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+@keyframes envelopeRollIn {
+  0% {
+    opacity: 0;
+    transform: translateY(70px) scale(0.55);
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Конверт — единый блок */
+.envelope__cluster {
+  --env-w: 260px;
+  --env-body-h: 118px;
+  --env-flap-h: 60px;
+  --env-green: #7f8a70;
+  --env-green-dark: #5f6f4c;
+
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  width: var(--env-w);
+  height: var(--env-body-h);
+  transform: translateX(-50%);
+  overflow: hidden;
+}
+
+.envelope.open .envelope__cluster {
+  overflow: visible;
+}
+
+/* Задняя стенка */
 .envelope__back {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 120px;
-  background: #6b7a5a;
-  border-radius: 0 0 6px 6px;
+  height: var(--env-body-h);
+  background: var(--env-green);
+  border-radius: 0 0 2px 2px;
   z-index: 1;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
 }
 
-.envelope__letter {
-  position: absolute;
-  bottom: 18px;
-  left: 50%;
-  z-index: 2;
-  width: 210px;
-  padding: 18px 16px;
-  background: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transform: translateX(-50%) translateY(16px);
-  opacity: 0;
-  transition:
-    transform 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s,
-    opacity 0.4s ease 0.45s,
-    box-shadow 0.4s ease 0.45s;
-}
-
-.envelope__letter p {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 13px;
-  font-style: italic;
-  line-height: 1.65;
-  color: #4a4a4a;
-}
-
+/* Передний карман — закрыт: сплошной прямоугольник */
 .envelope__pocket {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 120px;
+  height: var(--env-body-h);
+  background: var(--env-green);
   z-index: 3;
-  background: #7a846c;
-  clip-path: polygon(0 0, 50% 52%, 100% 0, 100% 100%, 0 100%);
   pointer-events: none;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transition: clip-path 0.55s ease;
+}
+
+.envelope.open.flap-done .envelope__pocket {
+  clip-path: polygon(0 0, 50% 34%, 100% 0, 100% 100%, 0 100%);
+}
+
+/* Клапан — треугольник, закрыт: смотрит вниз */
+.envelope__flap-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--env-flap-h);
+  z-index: 4;
+  pointer-events: none;
+  transform: translateY(0);
+  transition: transform 1.05s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 .envelope__flap {
-  position: absolute;
-  top: 30px;
-  left: 50%;
-  z-index: 4;
-  width: 0;
-  height: 0;
-  border-left: 130px solid transparent;
-  border-right: 130px solid transparent;
-  border-top: 62px solid #5a6b4a;
-  transform: translateX(-50%);
-  transform-origin: top center;
-  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s linear 0.55s;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.08));
+  width: 100%;
+  height: 100%;
+  background: var(--env-green-dark);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transition:
+    clip-path 1.05s cubic-bezier(0.33, 1, 0.68, 1),
+    background-color 1.05s ease;
 }
 
-.envelope.open {
-  animation: none;
-}
-
+/* Клапан открыт: смотрит вверх */
 .envelope.open .envelope__flap {
-  transform: translateX(-50%) rotateX(180deg);
-  z-index: 0;
-  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s linear 0s;
+  clip-path: polygon(0 100%, 50% 0, 100% 100%);
+  background: #667654;
 }
 
-.envelope.open .envelope__letter {
-  transform: translateX(-50%) translateY(calc(-100% - 36px));
+.envelope.open .envelope__flap-wrap {
+  transform: translateY(calc(-1 * var(--env-flap-h) + 8px));
+}
+
+.envelope.open.flap-done .envelope__flap-wrap {
+  z-index: 1;
+}
+
+/* Письмо — полностью спрятано внутри (за карманом) */
+.envelope__letter {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  z-index: 2;
+  width: 84%;
+  max-width: 220px;
+  padding: 24px 14px 20px;
+  background: #fff;
+  box-shadow: none;
+  opacity: 0;
+  transform: translate(-50%, 142px);
+  transition:
+    transform 1.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s ease,
+    opacity 0.25s ease;
+}
+
+.envelope__letter p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.6;
+  color: #4a4a4a;
+  text-align: center;
+}
+
+/* Письмо выезжает после открытия клапана */
+.envelope.open.letter-out .envelope__letter {
   opacity: 1;
+  transform: translate(-50%, -76px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.13);
+}
+
+/* Сердечки на конверте — видны только в финале */
+.envelope__hearts {
+  position: absolute;
+  bottom: calc(var(--env-body-h) - 18px);
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 5;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  display: flex;
+  gap: 10px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.envelope__hearts span {
+  font-size: 9px;
+  color: #6b4a3a;
+  opacity: 0.8;
+}
+
+.envelope.open.letter-out .envelope__hearts {
+  opacity: 1;
+  transition: opacity 0.6s ease 1s;
 }
 
 .envelope-hint {
@@ -718,11 +806,13 @@ body {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #9a9a9a;
-  margin-top: 24px;
-  transition: opacity 0.3s;
+  margin-top: 10px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
-.pulse-hint {
+.envelope-section.is-ready .envelope-hint {
+  opacity: 1;
   animation: hintPulse 2s ease-in-out infinite;
 }
 
