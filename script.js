@@ -28,6 +28,7 @@
     if (!audio || !toggle) return;
 
     var isOff = false;
+    var hasStarted = false;
     var trackPath = 'mus/Пицца - Романс (pesni.fm).mp3';
 
     audio.src = encodeURI(trackPath);
@@ -44,45 +45,84 @@
     }
 
     function tryPlay() {
-      if (isOff) return;
+      if (isOff) return Promise.resolve(false);
       var playPromise = audio.play();
-      if (playPromise && typeof playPromise.catch === 'function') {
-        playPromise.catch(function () {});
+      if (playPromise && typeof playPromise.then === 'function') {
+        return playPromise.then(function () {
+          hasStarted = true;
+          return true;
+        }).catch(function () {
+          return false;
+        });
       }
+      hasStarted = !audio.paused;
+      return Promise.resolve(hasStarted);
     }
 
     function stopMusic() {
       audio.pause();
     }
 
+    function removeBootstrapListeners() {
+      document.removeEventListener('pointerdown', bootstrapMusic);
+      document.removeEventListener('touchstart', bootstrapMusic);
+      document.removeEventListener('keydown', bootstrapMusic);
+      document.removeEventListener('wheel', bootstrapMusic);
+    }
+
+    function bootstrapMusic() {
+      if (isOff || hasStarted) return;
+      tryPlay().then(function (started) {
+        if (started) removeBootstrapListeners();
+      });
+    }
+
     function onTogglePress(e) {
       if (e && e.cancelable) e.preventDefault();
+
+      // Если музыка ещё не стартовала из-за политики браузера,
+      // первый клик по кнопке просто запускает её без переключения в "выкл".
+      if (!hasStarted && !isOff) {
+        tryPlay().then(function (started) {
+          if (started) removeBootstrapListeners();
+        });
+        return;
+      }
+
       isOff = !isOff;
       if (isOff) {
         stopMusic();
       } else {
-        tryPlay();
+        tryPlay().then(function (started) {
+          if (started) removeBootstrapListeners();
+        });
       }
       updateMusicButton();
     }
 
-    toggle.addEventListener('pointerdown', onTogglePress);
+    toggle.addEventListener('click', onTogglePress);
     toggle.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') onTogglePress(e);
     });
 
-    document.addEventListener('pointerdown', function bootstrapMusic() {
-      if (!isOff && audio.paused) tryPlay();
-      document.removeEventListener('pointerdown', bootstrapMusic);
-    });
+    document.addEventListener('pointerdown', bootstrapMusic, { passive: true });
+    document.addEventListener('touchstart', bootstrapMusic, { passive: true });
+    document.addEventListener('keydown', bootstrapMusic);
+    document.addEventListener('wheel', bootstrapMusic, { passive: true });
 
     document.addEventListener('visibilitychange', function () {
       if (document.hidden || isOff) return;
-      if (audio.paused) tryPlay();
+      if (audio.paused) {
+        tryPlay().then(function (started) {
+          if (started) removeBootstrapListeners();
+        });
+      }
     });
 
     updateMusicButton();
-    tryPlay();
+    tryPlay().then(function (started) {
+      if (started) removeBootstrapListeners();
+    });
   }
 
   /* --- Intro floating particles --- */
