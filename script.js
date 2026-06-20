@@ -29,6 +29,10 @@
 
     var label = toggle.querySelector('.music-toggle__label');
     var isOff = false;
+    var trackPath = 'mus/Пицца - Романс (pesni.fm).mp3';
+
+    audio.src = encodeURI(trackPath);
+    audio.load();
 
     audio.volume = 0.38;
     audio.loop = true;
@@ -54,7 +58,8 @@
       audio.pause();
     }
 
-    toggle.addEventListener('click', function () {
+    function onTogglePress(e) {
+      if (e && e.cancelable) e.preventDefault();
       isOff = !isOff;
       if (isOff) {
         stopMusic();
@@ -62,6 +67,16 @@
         tryPlay();
       }
       updateMusicButton();
+    }
+
+    toggle.addEventListener('pointerdown', onTogglePress);
+    toggle.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') onTogglePress(e);
+    });
+
+    document.addEventListener('pointerdown', function bootstrapMusic() {
+      if (!isOff && audio.paused) tryPlay();
+      document.removeEventListener('pointerdown', bootstrapMusic);
     });
 
     document.addEventListener('visibilitychange', function () {
