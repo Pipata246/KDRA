@@ -27,11 +27,12 @@
     var toggle = document.getElementById('musicToggle');
     if (!audio || !toggle) return;
 
-    var label = toggle.querySelector('.music-toggle__label');
     var isOff = false;
     var trackPath = 'mus/Пицца - Романс (pesni.fm).mp3';
 
     audio.src = encodeURI(trackPath);
+    audio.autoplay = true;
+    audio.muted = false;
     audio.load();
 
     audio.volume = 0.38;
@@ -40,17 +41,13 @@
     function updateMusicButton() {
       toggle.classList.toggle('is-off', isOff);
       toggle.setAttribute('aria-pressed', String(!isOff));
-      if (label) label.textContent = isOff ? 'звук выкл' : 'звук вкл';
     }
 
     function tryPlay() {
       if (isOff) return;
       var playPromise = audio.play();
       if (playPromise && typeof playPromise.catch === 'function') {
-        playPromise.catch(function () {
-          isOff = true;
-          updateMusicButton();
-        });
+        playPromise.catch(function () {});
       }
     }
 
