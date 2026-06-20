@@ -21,6 +21,58 @@
     });
   }
 
+  /* --- Background music toggle --- */
+  function initBackgroundMusic() {
+    var audio = document.getElementById('bgMusic');
+    var toggle = document.getElementById('musicToggle');
+    if (!audio || !toggle) return;
+
+    var label = toggle.querySelector('.music-toggle__label');
+    var isOff = false;
+
+    audio.volume = 0.38;
+    audio.loop = true;
+
+    function updateMusicButton() {
+      toggle.classList.toggle('is-off', isOff);
+      toggle.setAttribute('aria-pressed', String(!isOff));
+      if (label) label.textContent = isOff ? 'звук выкл' : 'звук вкл';
+    }
+
+    function tryPlay() {
+      if (isOff) return;
+      var playPromise = audio.play();
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(function () {
+          isOff = true;
+          updateMusicButton();
+        });
+      }
+    }
+
+    function stopMusic() {
+      audio.pause();
+    }
+
+    toggle.addEventListener('click', function () {
+      isOff = !isOff;
+      if (isOff) {
+        stopMusic();
+      } else {
+        tryPlay();
+      }
+      updateMusicButton();
+    });
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden || isOff) return;
+      if (audio.paused) tryPlay();
+    });
+
+    updateMusicButton();
+    tryPlay();
+  }
+
   /* --- Intro floating particles --- */
   function initIntroParticles() {
     var canvas = document.getElementById('introParticles');
@@ -499,6 +551,7 @@
 
   /* --- Init --- */
   initCopyProtection();
+  initBackgroundMusic();
   initIntroParticles();
   initTouchSparkles();
   initPoetry();
